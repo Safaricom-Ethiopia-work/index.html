@@ -6,130 +6,98 @@
     <title>Safaricom Ethiopia - Job & Training Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --saf-red: #e60000; --saf-green: #00FF00; --gradient: linear-gradient(135deg, #e60000 0%, #8b0000 100%); }
-        body { font-family: 'Segoe UI', 'Ubuntu', sans-serif; background: #f8f9fa; margin: 0; padding: 10px; color: #333; }
-        .container { background: #fff; max-width: 800px; margin: 20px auto; padding: 35px; border-radius: 25px; box-shadow: 0 15px 50px rgba(0,0,0,0.1); border-top: 12px solid var(--saf-red); }
-        h2, h3 { text-align: center; color: #222; margin-bottom: 10px; }
-        .hero { background: #fff5f5; padding: 25px; border-radius: 15px; border-left: 6px solid var(--saf-red); margin-bottom: 30px; text-align: justify; line-height: 1.8; }
+        :root { --saf-green: #2db34a; --saf-red: #e60000; --gradient: linear-gradient(135deg, #2db34a 0%, #1a7a32 100%); }
+        body { font-family: 'Segoe UI', 'Ubuntu', sans-serif; background: #f4f7f6; margin: 0; padding: 10px; color: #333; }
+        .container { background: #fff; max-width: 800px; margin: 20px auto; padding: 35px; border-radius: 25px; box-shadow: 0 15px 50px rgba(0,0,0,0.1); border-top: 12px solid var(--saf-green); }
+        .hero { background: #f0fff0; padding: 25px; border-radius: 15px; border-left: 6px solid var(--saf-green); margin-bottom: 30px; text-align: justify; line-height: 1.8; }
         .tab { display: none; animation: fadeIn 0.5s; } .active { display: block; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-        label { font-weight: 700; font-size: 14px; color: #555; display: block; margin-bottom: 8px; }
-        input, select, textarea { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 10px; font-size: 16px; transition: 0.3s; box-sizing: border-box; }
-        input:focus { border-color: var(--saf-red); outline: none; background: #fffcfc; }
-        .btn-group { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; }
-        button { padding: 15px 45px; border-radius: 50px; border: none; cursor: pointer; font-weight: bold; font-size: 17px; transition: 0.4s; }
-        .btn-next { background: var(--gradient); color: white; width: 100%; box-shadow: 0 5px 15px rgba(230,0,0,0.3); }
+        label { font-weight: 700; font-size: 14px; color: #444; display: block; margin-bottom: 8px; }
+        input, select { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
+        input:focus { border-color: var(--saf-green); outline: none; }
+        .btn-group { display: flex; justify-content: space-between; margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; }
+        button { padding: 15px 45px; border-radius: 50px; border: none; cursor: pointer; font-weight: bold; font-size: 17px; }
+        .btn-next { background: var(--gradient); color: white; width: 100%; box-shadow: 0 5px 15px rgba(45,179,74,0.3); }
         .success-box { text-align: center; display: none; }
-        #userPhotoPreview { width: 170px; height: 170px; object-fit: cover; border-radius: 15px; border: 5px solid #f0f0f0; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        .lang-card { background: #f9f9f9; padding: 20px; border-radius: 15px; margin-top: 20px; text-align: justify; border: 1px solid #eee; line-height: 1.7; }
-        .certificate-container { border: 2px solid var(--saf-green); padding: 10px; border-radius: 10px; margin-bottom: 15px; text-align: center; }
-        .certificate-container p { font-size: 18px; color: var(--saf-green); font-weight: bold; }
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+        #userPhotoPreview { width: 170px; height: 170px; object-fit: cover; border-radius: 20px; border: 5px solid var(--saf-green); margin-bottom: 20px; }
+        .cert-box { border: 2px dashed var(--saf-green); padding: 15px; border-radius: 15px; margin: 20px 0; background: #f9fff9; }
+        .lang-card { background: #fdfdfd; padding: 20px; border-radius: 15px; margin-top: 15px; text-align: justify; border: 1px solid #eee; line-height: 1.7; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="landing" class="active">
-        <h2>ሳፋሪኮም ኢትዮጵያ</h2>
-        <h3>የገጠር ማስፋፊያ የሥራና ሥልጠና ሀገራዊ ጥሪ</h3>
+        <div style="text-align:center; margin-bottom:20px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Safaricom_logo.svg/1200px-Safaricom_logo.svg.png" alt="Safaricom" style="height:50px;">
+        </div>
         <div class="hero">
-            <p><strong>ለአመልካቾች ፤</strong> ሳፋሪኮም ኢትዮጵያ ከሥራና ክህሎት ሚኒስቴር ጋር በመተባበር የዲጂታል ኢትዮጵያን ራዕይ እውን ለማድረስና የዜጎችን ሕይወት በቴክኖሎጂ ለመለወጥ ታላቅ ሀገራዊ ፕሮጀክት ቀርጿል። ይህ ፕሮጀክት የቴሌኮም አገልግሎቱን ወደ እያንዳንዱ የኢትዮጵያ ገጠር መንደሮች ለማድረስ ያለመ ነው።</p>
-            <p>በመሆኑም በቴክኖሎጂው ዘርፍ የላቀ ፍላጎት ያላችሁና የወደፊት የኩባንያው የጀርባ አጥንት ለመሆን የምትተጉ ወጣቶች የዚህ ታሪካዊ ጉዞ አካል እንድትሆኑ ተጋብዛችኋል። ብቁ ሆነው ለሚገኙ አመልካቾች በዘርፉ ዓለም አቀፍ ደረጃውን የጠበቀ የክህሎት ሥልጠና የሚሰጥ ሲሆን፣ ሥልጠናውን በስኬት ለሚያጠናቅቁ ወጣቶች በሳፋሪኮም ኢትዮጵያ ውስጥ ቀጥታ የሥራ ቅጥር ይፈጸምላቸዋል።</p>
+            <p><strong>ለአመልካቾች፤</strong> ሳፋሪኮም ኢትዮጵያ ከሥራና ክህሎት ሚኒስቴር ጋር በመተባበር የቴሌኮም አገልግሎቱን ወደ እያንዳንዱ የኢትዮጵያ ገጠር መንደሮች ለማድረስ ታላቅ ሀገራዊ ፕሮጀክት ቀርጿል። ብቁ ሆነው ለሚገኙ አመልካቾች ዓለም አቀፍ ደረጃውን የጠበቀ የክህሎት ሥልጠና የሚሰጥ ሲሆን፣ ሥልጠናውን በስኬት ለሚያጠናቅቁ ወጣቶች በሳፋሪኮም ኢትዮጵያ ውስጥ ቀጥታ የሥራ ቅጥር ይፈጸምላቸዋል።</p>
             <button class="btn-next" onclick="startForm()">ምዝገባ ለመጀመር እዚህ ይጫኑ / Apply Now</button>
         </div>
     </div>
 
     <form id="regForm" style="display:none;">
         <div class="tab active">
-            <h3 style="color:var(--saf-red)">ደረጃ 1፡ የግል መረጃ</h3>
+            <h3 style="color:var(--saf-green)">ደረጃ 1፡ የግል መረጃ</h3>
             <div class="grid">
                 <div><label>ሙሉ ስም ከነአባቱ *</label><input id="full_name" required></div>
-                <div><label>ጾታ *</label>
-                    <select id="gender" required>
-                        <option value="">ይምረጡ...</option>
-                        <option>ወንድ</option>
-                        <option>ሴት</option>
-                    </select>
-                </div>
-                <div><label>እድሜ *</label>
-                    <select id="age" required>
-                        <option value="">እድሜ ይምረጡ...</option>
-                        <option>ከ18 - 25</option>
-                        <option>ከ26 - 35</option>
-                        <option>ከ36 በላይ</option>
-                    </select>
-                </div>
+                <div><label>ጾታ *</label><select id="gender" required><option value="">ይምረጡ...</option><option>ወንድ</option><option>ሴት</option></select></div>
+                <div><label>እድሜ *</label><input id="age" type="number" required></div>
                 <div><label>ስልክ ቁጥር *</label><input id="phone" type="tel" required></div>
                 <div><label>የፋይዳ (ልዩ መታወቂያ) ቁጥር *</label><input id="fayda_id" required></div>
-                <div style="grid-column: 1 / -1;"><label>የግል ፎቶ (4x4 ለመለያ) *</label><input type="file" id="p_photo" accept="image/*" required onchange="previewImage(this)"></div>
-                <div style="grid-column: 1 / -1;"><label>የቀበሌ መታወቂያ (4x4 ለመለያ) *</label><input type="file" id="keb_photo" accept="image/*" required onchange="previewKebImage(this)"></div>
+                <div style="grid-column: 1 / -1;"><label>የግል ፎቶ (4x4) *</label><input type="file" id="p_photo" accept="image/*" required onchange="previewImage(this)"></div>
+                <div style="grid-column: 1 / -1;"><label>የቀበሌ መታወቂያ ፎቶ *</label><input type="file" id="id_photo" accept="image/*" required></div>
             </div>
         </div>
 
         <div class="tab">
-            <h3 style="color:var(--saf-red)">ደረጃ 2፡ ዝርዝር አድራሻ</h3>
+            <h3 style="color:var(--saf-green)">ደረጃ 2፡ አድራሻና ትምህርት</h3>
             <div class="grid">
-                <div><label>ክልል *</label>
-                    <select id="region" required>
-                        <option value="">ክልል ይምረጡ...</option>
-                        <option>አዲስ አበባ</option><option>አማራ</option><option>ኦሮሚያ</option><option>ትግራይ</option><option>ደቡብ ኢትዮጵያ</option>
-                        <option>ማዕከላዊ ኢትዮጵያ</option><option>ሲዳማ</option><option>ሶማሌ</option><option>አፋር</option><option>ጋምቤላ</option>
-                        <option>ቤንሻንጉል ጉምዝ</option><option>ሐረሪ</option><option>ድሬዳዋ</option>
-                    </select>
-                </div>
+                <div><label>ክልል *</label><select id="region" required><option value="">ይምረጡ...</option><option>አዲስ አበባ</option><option>አማራ</option><option>ኦሮሚያ</option><option>ትግራይ</option><option>ደቡብ ኢትዮጵያ</option><option>ሲዳማ</option><option>ሶማሌ</option></select></div>
                 <div><label>ዞን *</label><input id="zone" required></div>
                 <div><label>ወረዳ *</label><input id="woreda" required></div>
                 <div><label>ቀበሌ *</label><input id="kebele" required></div>
+                <div><label>የትምህርት ደረጃ *</label><select id="edu" required><option value="">ይምረጡ...</option><option>ማስተርስ</option><option>ድግሪ</option><option>ዲፕሎማ</option><option>ከ8ኛ ክፍል በታች</option></select></div>
+                <div><label>የትምህርት ማስረጃ (Certificate) *</label><input type="file" id="cert_doc" required></div>
             </div>
         </div>
 
         <div class="tab">
-            <h3 style="color:var(--saf-red)">ደረጃ 3፡ ትምህርትና ክፍያ</h3>
-            <div class="grid">
-                <div><label>የትምህርት ደረጃ *</label>
-                    <select id="edu" required>
-                        <option value="">ይምረጡ...</option><option>ማስተርስ</option><option>ድግሪ</option><option>ዲፕሎማ</option><option>ከ8ኛ ክፍል በታች</option>
-                    </select>
-                </div>
-                <div><label>የትምህርት ማስረጃ (PDF/Image) *</label><input type="file" id="edu_doc" required></div>
+            <h3 style="color:var(--saf-green)">ደረጃ 3፡ ክፍያ</h3>
+            <div style="background:#e8f5e9; border:2px dashed #2db34a; padding:25px; border-radius:15px; text-align:center;">
+                <h4 style="margin:0; color:#1a7a32;">M-PESA: 0721224921</h4>
+                <p style="font-size:24px; font-weight:bold; margin:10px 0;">100 ብር</p>
+                <small>ለCOC እና ሰነድ ማጣሪያ አገልግሎት</small>
             </div>
-            <div style="background:#f0f7ff; border:1px solid #007bff; padding:15px; border-radius:10px; margin:15px 0; font-size:13px; text-align:justify;">
-                <strong>የብቃት ማረጋገጫ ክፍያ ማሳሰቢያ፦</strong> ይህ 100 ብር ክፍያ ለሥራና ክህሎት ሚኒስቴር የብቃት ማረጋገጫ (COC) ምዘና፣ ለቴክኒክ መሣሪያዎች ዝግጅት እና ለሰነድ ማጣሪያ አገልግሎት የሚውል ነው።
-            </div>
-            <div style="background:#e8f5e9; border:2px dashed #2e7d32; padding:20px; border-radius:15px; text-align:center;">
-                <h4 style="color:#1b5e20; margin:0;">M-PESA የክፍያ አድራሻ</h4>
-                <p style="font-size:26px; font-weight:900; margin:10px 0;">0721224921</p>
-                <p style="font-size:18px; color:#2e7d32; margin:0;">መጠን: 100 ብር</p>
-            </div>
-            <label style="margin-top:15px;">የክፍያ ደረሰኝ (Screenshot) *</label><input type="file" id="receipt" required>
+            <label style="margin-top:20px;">የክፍያ ደረሰኝ (Screenshot) *</label><input type="file" id="receipt" required>
         </div>
 
         <div class="btn-group">
             <button type="button" style="background:#eee; width:30%;" id="prevBtn" onclick="move(-1)">ተመለስ</button>
-            <button type="button" class="btn-next" style="width:65%;" id="nextBtn" onclick="move(1)">ቀጥል</button>
+            <button type="button" class="btn-next" style="width:65%;" id="nextBtn" onclick="move(1)">መረጃውን ላክ</button>
         </div>
     </form>
 
     <div id="success" class="success-box">
-        <img id="userPhotoPreview" src="" alt="User Photo">
-        <h1 style="color:var(--saf-red); margin:0;">Congratulations</h1>
-        <h1 style="color:var(--saf-red); margin:0;">እንኳን ደስ አለዎት!</h1>
-        <h2 id="finalName" style="margin:10px 0; font-size:30px;"></h2>
+        <h1 style="color:var(--saf-green); margin-bottom:5px;">Congratulations!</h1>
+        <h2 style="color:#222; margin-top:0;">እንኳን ደስ አለዎት!</h2>
+        <img id="userPhotoPreview" src="" alt="አመልካች">
+        <div id="finalName" style="font-size:32px; font-weight:900; color:var(--saf-green); margin-bottom:10px;"></div>
         
-        <div class="lang-cardCertificate-container">
-            <p> የትምህርት certifica አይነት </p>
+        <div class="cert-box">
+            <strong style="color:var(--saf-green);">የተያያዘ የትምህርት ማስረጃ (Certificate)</strong><br>
+            <small>በቴክኒክ ኮሚቴው እየተመረመረ ይገኛል</small>
         </div>
 
         <div class="lang-card">
-            <p><strong>፦</strong> ያቀረቡት መረጃ፣ የትምህርት ማስረጃ እና የክፍያ ደረሰኝ በቴክኒክ ኮሚቴው አማካኝነት በጥንቃቄ እየተጣራ ይገኛል። የመረጃ ማጣራቱ ሂደት እንደተጠናቀቀና ብቁ ሆነው ሲገኙ፣ ለቀጣይ ሥልጠና እና የሥራ ስምሪት በስልክ ቁጥርዎ አጭር የጽሁፍ መልዕክት (SMS) ይላክልዎታል።</p>
+            <p>ያቀረቡት መረጃ፣ የትምህርት ማስረጃ እና የክፍያ ደረሰኝ በቴክኒክ ኮሚቴው አማካኝነት በጥንቃቄ እየተጣራ ይገኛል። የመረጃ ማጣራቱ ሂደት እንደተጠናቀቀና ብቁ ሆነው ሲገኙ፣ ለቀጣይ ሥልጠና እና የሥራ ስምሪት በስልክ ቁጥርዎ አጭር የጽሁፍ መልዕክት (SMS) ይላክልዎታል።</p>
         </div>
-        
-        <div class="lang-card" style="direction: ltr;">
-            <p><strong>:</strong> Your application, educational credentials, and payment receipt are currently being verified by our technical committee. Once the verification is complete and your eligibility is confirmed, you will receive an SMS regarding the next steps for training and deployment.</p>
+        <div class="lang-card" style="direction:ltr;">
+            <p>Your application, credentials, and payment receipt are being verified. Once confirmed, you will receive an SMS regarding the next steps for training and deployment. Thank you for your commitment.</p>
         </div>
-        
         <button class="btn-next" style="margin-top:30px;" onclick="location.reload()">ጨርስ / Finish</button>
     </div>
 </div>
@@ -149,14 +117,6 @@
         }
     }
 
-    function previewKebImage(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) { document.getElementById('keb_photo').src = e.target.result; };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
     function startForm() { document.getElementById("landing").style.display="none"; document.getElementById("regForm").style.display="block"; }
 
     function move(n) {
@@ -166,7 +126,7 @@
         if (currentTab >= tabs.length) { submitData(); return; }
         tabs[currentTab].classList.add("active");
         document.getElementById("prevBtn").style.display = (currentTab == 0) ? "none" : "inline";
-        document.getElementById("nextBtn").innerText = (currentTab == tabs.length - 1) ? "መረጃውን ላክ / Submit" : "ቀጥል / Next";
+        document.getElementById("nextBtn").innerText = (currentTab == tabs.length - 1) ? "መረጃውን ላክ" : "ቀጥል";
     }
 
     function validate() {
@@ -180,24 +140,16 @@
     async function submitData() {
         const name = document.getElementById("full_name").value;
         const allData = {
-            full_name: name,
-            fayda_id: document.getElementById("fayda_id").value,
+            name: name,
             phone: document.getElementById("phone").value,
-            gender: document.getElementById("gender").value,
+            fayda: document.getElementById("fayda_id").value,
             age: document.getElementById("age").value,
             region: document.getElementById("region").value,
-            zone: document.getElementById("zone").value,
-            woreda: document.getElementById("woreda").value,
-            kebele: document.getElementById("kebele").value,
-            education: document.getElementById("edu").value,
-            submitted_at: new Date().toLocaleString()
+            edu: document.getElementById("edu").value,
+            date: new Date().toLocaleString()
         };
 
-        const { error } = await _supabase.from('registrations').insert([{ 
-            full_name: name, 
-            phone: allData.phone, 
-            all_data: allData 
-        }]);
+        const { error } = await _supabase.from('registrations').insert([{ full_name: name, phone: allData.phone, all_data: allData }]);
 
         if(!error) {
             document.getElementById("regForm").style.display="none";
