@@ -189,6 +189,9 @@
             document.getElementById("regForm").style.display="none";
             document.getElementById("success").style.display="block";
             document.getElementById("finalName").innerText = name;
+
+        } catch (err) {
+            
             document.getElementById("nextBtn").innerText = "መረጃውን ላክ / Submit";
             document.getElementById("nextBtn").disabled = false;
         }
