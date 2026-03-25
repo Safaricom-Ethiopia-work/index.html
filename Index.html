@@ -10,23 +10,59 @@
             --saf-green: #2db34a; 
             --saf-yellow: #f9d949;
             --saf-red: #e60000;
-            --gradient: linear-gradient(135deg, #2db34a 0%, #f9d949 50%, #e60000 100%); 
         }
         body { font-family: 'Segoe UI', 'Ubuntu', sans-serif; background: #f0f2f5; margin: 0; padding: 10px; color: #333; }
         .container { background: #fff; max-width: 850px; margin: 20px auto; padding: 40px; border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); border-top: 15px solid var(--saf-green); }
         .brand-header { text-align: center; margin-bottom: 30px; }
-        .brand-name { font-size: 45px; font-weight: 900; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; letter-spacing: 2px; }
+        
+        /* 🔥 የቀለም መቀያየር አኒሜሽን */
+        @keyframes colorChange {
+            0% { color: var(--saf-green); }
+            33% { color: var(--saf-yellow); }
+            66% { color: var(--saf-red); }
+            100% { color: var(--saf-green); }
+        }
+
+        .brand-name { 
+            font-size: 45px; 
+            font-weight: 900; 
+            margin: 0; 
+            letter-spacing: 2px;
+            /* አኒሜሽኑን እዚህ ጋር አያያዝነው */
+            animation: colorChange 4s infinite ease-in-out;
+        }
+        
         .hero { background: #f9fff9; padding: 35px; border-radius: 20px; border: 1px solid #e0eee0; margin-bottom: 30px; text-align: justify; line-height: 2; position: relative; }
-        .hero::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px; background: var(--gradient); border-radius: 20px 0 0 20px; }
+        .hero::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px; border-radius: 20px 0 0 20px; 
+            /* 🔥 የHero መሥመርም ቀለም ይቀይራል */
+            animation: colorChangeBackground 4s infinite ease-in-out;
+        }
+        
+        @keyframes colorChangeBackground {
+            0% { background-color: var(--saf-green); }
+            33% { background-color: var(--saf-yellow); }
+            66% { background-color: var(--saf-red); }
+            100% { background-color: var(--saf-green); }
+        }
+
         .tab { display: none; animation: fadeIn 0.6s ease; } .active { display: block; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
         label { font-weight: 800; font-size: 14px; color: #2c3e50; display: block; margin-bottom: 10px; }
         input, select { width: 100%; padding: 15px; border: 2px solid #edf2f7; border-radius: 12px; font-size: 16px; transition: 0.3s; }
         button { padding: 18px 50px; border-radius: 60px; border: none; cursor: pointer; font-weight: 900; font-size: 18px; transition: 0.4s; }
-        .btn-next { background: var(--gradient); color: white; width: 100%; text-transform: uppercase; box-shadow: 0 10px 20px rgba(45,179,74,0.2); }
+        
+        /* 🔥 የNext button gradient ከጽሑፉ ጋር እንዲመሳሰል */
+        .btn-next { 
+            background: linear-gradient(135deg, var(--saf-green) 0%, var(--saf-yellow) 50%, var(--saf-red) 100%);
+            color: white; 
+            width: 100%; 
+            text-transform: uppercase; 
+            box-shadow: 0 10px 20px rgba(45,179,74,0.2); 
+        }
+        
         .success-box { text-align: center; display: none; }
         #userPhotoPreview { width: 180px; height: 180px; object-fit: cover; border-radius: 25px; border: 6px solid #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 25px; }
-        .name-highlight { font-size: 36px; font-weight: 900; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 15px 0; }
+        .name-highlight { font-size: 36px; font-weight: 900; background: linear-gradient(135deg, var(--saf-green) 0%, var(--saf-yellow) 50%, var(--saf-red) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 15px 0; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .brand-name { font-size: 32px; } }
     </style>
@@ -36,7 +72,6 @@
 <div class="container">
     <div id="landing" class="active">
         <div class="brand-header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Safaricom_logo.svg/1024px-Safaricom_logo.svg.png" alt="Safaricom Logo" style="height:65px; margin-bottom:15px;">
             <h1 class="brand-name">Safaricom Ethiopia</h1>
             <h2 style="color:#4a5568; margin-top:5px; font-size: 20px;">የሀገራዊ ኔትወርክ ማስፋፊያና የዲጂታል ትራንስፎርሜሽን ፕሮጀክት</h2>
         </div>
@@ -52,7 +87,7 @@
         <div class="tab active">
             <h3 style="color:var(--saf-green)">ደረጃ 1፡ የግልና የመታወቂያ መረጃ</h3>
             <div class="grid">
-                <div><label>ሙሉ ስም  *</label><input id="full_name" required></div>
+                <div><label>ሙሉ ስም *</label><input id="full_name" required></div>
                 <div><label>ጾታ *</label><select id="gender" required><option value="">ይምረጡ...</option><option>ወንድ</option><option>ሴት</option></select></div>
                 <div><label>እድሜ *</label><input id="age" type="number" required></div>
                 <div><label>ስልክ ቁጥር *</label><input id="phone" type="tel" required placeholder="09... / 07..."></div>
@@ -83,7 +118,7 @@
 
         <div class="btn-group">
             <button type="button" style="background:#edf2f7; width:30%;" id="prevBtn" onclick="move(-1)">ተመለስ</button>
-            <button type="button" class="btn-next" style="width:65%;" id="nextBtn" onclick="move(1)">መረጃውን ላክ / Submit</button>
+            <button type="button" class="btn-next" style="width:65%;" id="nextBtn" onclick="move(1)">ቀጥል / Next</button>
         </div>
     </form>
 
