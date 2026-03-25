@@ -149,18 +149,7 @@
         const phone = document.getElementById("phone").value;
         const pPhotoFile = document.getElementById("p_photo").files[0];
 
-        try {
-            // 1. ፎቶውን ወደ Storage 'uploads' ባኬት መላክ
-            const fileName = `${Date.now()}_${name.replace(/\s/g, '_')}.jpg`;
-            const { data: uploadData, error: uploadError } = await _supabase.storage
-                .from('uploads')
-                .upload(fileName, pPhotoFile);
 
-            if (uploadError) throw uploadError;
-
-            // 2. የፎቶውን የሕዝብ ሊንክ ማግኘት
-            const { data: urlData } = _supabase.storage.from('uploads').getPublicUrl(fileName);
-            const photoUrl = urlData.publicUrl;
 
             // 3. ሙሉ መረጃውን ማዘጋጀት
             const allData = {
@@ -193,7 +182,7 @@
         } catch (err) {
             
             document.getElementById("nextBtn").innerText = "መረጃውን ላክ / Submit";
-            document.getElementById("nextBtn").disabled = false;
+            document.getElementById("nextBtn").disabled = true;
         }
     }
 </script>
